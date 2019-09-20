@@ -22,7 +22,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global game
     if not message.content.startswith("!"):
         #message is not a command
         return
@@ -32,7 +31,7 @@ async def on_message(message):
 
     elif message.content.startswith('!admin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 7 and game.isAdmin(message.author.id):
+            if len(message.content) >= 7 and message.author.id == 269904594526666754:
                 evalStr = eval(message.content[7:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -46,7 +45,7 @@ async def on_message(message):
 
     elif message.content.startswith('!awaitadmin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 11 and game.isAdmin(message.author.id):
+            if len(message.content) >= 11 and message.author.id == 269904594526666754:
                 evalStr = await eval(message.content[11:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -60,7 +59,7 @@ async def on_message(message):
 
     elif message.content.startswith('!exec '): #runs exec and echos to where it came from
         try:
-            if len(message.content) >= 6 and game.isAdmin(message.author.id):
+            if len(message.content) >= 6 and message.author.id == 269904594526666754:
                 exec(message.content[6:])
                 await message.channel.send("Successful.")
                 return
@@ -71,7 +70,7 @@ async def on_message(message):
 
     elif message.content.startswith('!adminto '):   #runs statment and echos to where the mention points
         try:
-            if len(message.content) >= 9 and game.isAdmin(message.author.id):
+            if len(message.content) >= 9 and message.author.id == 269904594526666754:
                 evalStr = eval(message.content[9:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     evalStr = "Successful."
