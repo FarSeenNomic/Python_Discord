@@ -103,9 +103,8 @@ async def on_message(message):
             #if everyone, return
             if m.content.startswith("!end") and m.author.id == 269904594526666754:
                 return True
-                
+
             elif m.content.startswith("!"+(randomOptOut-1)) or m.content.startswith("!"+(randomOptOut+1)):
-                await message.channel.send("OBOE")
                 randomOptOut = random.randint(10000,99999)
                 return False
 
