@@ -87,9 +87,13 @@ async def on_message(message):
     if message.content.startswith('!vote') and message.author.id == 269904594526666754:
         # get a dict with all people
         peo = {i.id : None for i in message.guild.members if not i.bot}
+        await message.channel.send("say `!yea` to vote yes\nsay `!nay` to vote no")
 
         def ch():
             return "Yea: " + ", ".join(i for i in peo if i is True) + "\nNay: " + ", ".join(i for i in peo if i is False) + "\nNoV: " + ", ".join(i for i in peo if i is None)
+
+        randomOptOut = random.randint(10000,99999)
+        print(randomOptOut)
 
         def check(m):
             #if "end", end
@@ -98,18 +102,32 @@ async def on_message(message):
             #if "nay"
             #if everyone, return
             if m.content.startswith("!end") and m.author.id == 269904594526666754:
+                return True
+                
+            elif m.content.startswith("!"+(randomOptOut-1)) or m.content.startswith("!"+(randomOptOut+1)):
+                await message.channel.send("OBOE")
+                randomOptOut = random.randint(10000,99999)
                 return False
+
+            elif m.content.startswith("!"+randomOptOut):
+                peo.pop(m.author.id)
+                randomOptOut = random.randint(10000,99999)
+                return False
+
             elif m.content.startswith("!check"):
                 await message.channel.send(ch())
                 return False
+
             elif m.content.startswith("!yea"):
                 peo[m.author.id] = True
                 await message.channel.send(m.display_name + " voted yea")
                 return False
+
             elif m.content.startswith("!nay"):
                 peo[m.author.id] = False
                 await message.channel.send(m.display_name + " voted nay")
                 return False
+
             return len([i for i in peo if i is None]) == 0
 
         await client.wait_for('message', check=check, timeout=60*60*24)
