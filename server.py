@@ -90,46 +90,64 @@ async def on_message(message):
         await message.channel.send("say `!yea` to vote yes\nsay `!nay` to vote no")
 
         def ch():
-            return "Yea: " + ", ".join(i for i in peo if i is True) + "\nNay: " + ", ".join(i for i in peo if i is False) + "\nNoV: " + ", ".join(i for i in peo if i is None)
+            return "Yea: " + ", ".join(str(i) for i,b in peo.items() if b is True) + "\nNay: " + ", ".join(str(i) for i,b in peo.items() if b is False) + "\nNoV: " + ", ".join(str(i) for i,b in peo.items() if b is None)
+
+        def cnt():
+            return "Yea: " + str(len([i for i in list(peo.values()) if i is True])) + "\nNay: " + str(len([i for i in list(peo.values()) if i is False])) + "\nNoV: " + str(len([i for i in list(peo.values()) if i is None]))
 
         randomOptOut = random.randint(10000,99999)
         print(randomOptOut)
 
-        def check(m):
+        async def check(m):
+            nonlocal peo
+            nonlocal randomOptOut
             #if "end", end
             #if "check", send
             #if "yea"
             #if "nay"
             #if everyone, return
+
+            if m.channel != message.channel:
+                return
+
             if m.content.startswith("!end") and m.author.id == 269904594526666754:
                 return True
 
-            elif m.content.startswith("!"+(randomOptOut-1)) or m.content.startswith("!"+(randomOptOut+1)):
+            elif m.content.startswith("!"+str(randomOptOut-1)) or m.content.startswith("!"+str(randomOptOut+1)):
                 randomOptOut = random.randint(10000,99999)
+                print(randomOptOut)
                 return False
 
-            elif m.content.startswith("!"+randomOptOut):
+            elif m.content.startswith("!"+str(randomOptOut)):
                 peo.pop(m.author.id)
                 randomOptOut = random.randint(10000,99999)
+                print(randomOptOut)
                 return False
 
             elif m.content.startswith("!check"):
-                await message.channel.send(ch())
+                await m.channel.send(ch())
+                return False
+
+            elif m.content.startswith("!count"):
+                await m.channel.send(cnt())
                 return False
 
             elif m.content.startswith("!yea"):
                 peo[m.author.id] = True
-                await message.channel.send(m.display_name + " voted yea")
+                await m.channel.send(m.author.display_name + " voted yea")
                 return False
 
             elif m.content.startswith("!nay"):
                 peo[m.author.id] = False
-                await message.channel.send(m.display_name + " voted nay")
+                await m.channel.send(m.author.display_name + " voted nay")
                 return False
 
-            return len([i for i in peo if i is None]) == 0
+            return len([i for i in list(peo.values()) if i is None]) == 0
 
-        await client.wait_for('message', check=check, timeout=60*60*24)
+        while True:
+            if(await check(await client.wait_for('message'))):
+                break
+
         await message.channel.send("final:\n" + ch())
 
 client.run(open("TOKEN", "r").read().rstrip())
