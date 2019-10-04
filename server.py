@@ -110,7 +110,7 @@ async def on_message(message):
             if m.channel != message.channel:
                 return
 
-            if m.content.startswith("!end") and m.author.id == 269904594526666754:
+            if m.content.lower().startswith("!end") and m.author.id == 269904594526666754:
                 return True
 
             elif m.content.startswith("!"+str(randomOptOut-1)) or m.content.startswith("!"+str(randomOptOut+1)):
@@ -124,20 +124,20 @@ async def on_message(message):
                 print(randomOptOut)
                 return False
 
-            elif m.content.startswith("!check"):
+            elif m.content.lower().startswith("!check"):
                 await m.channel.send(ch())
                 return False
 
-            elif m.content.startswith("!count"):
+            elif m.content.lower().startswith("!count"):
                 await m.channel.send(cnt())
                 return False
 
-            elif m.content.startswith("!yea"):
+            elif m.content.lower().startswith("!yea"):
                 peo[m.author.id] = True
                 await m.channel.send(m.author.display_name + " voted yea")
                 return False
 
-            elif m.content.startswith("!nay"):
+            elif m.content.lower().startswith("!nay"):
                 peo[m.author.id] = False
                 await m.channel.send(m.author.display_name + " voted nay")
                 return False
