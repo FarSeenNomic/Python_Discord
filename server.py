@@ -14,67 +14,66 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    async with message.channel.typing():
-        if not message.content.lower().startswith("!"):
-            #message is not a command
-            return
-        elif message.author.bot:
-            #message is made by a bot
-            return
+    if not message.content.lower().startswith("!"):
+        #message is not a command
+        return
+    elif message.author.bot:
+        #message is made by a bot
+        return
 
-        elif message.content.lower().startswith('!admin '): #runs statment and echos to where it came from
-            try:
-                if len(message.content) >= 7 and message.author.id == 269904594526666754:
-                    evalStr = eval(message.content[7:])
-                    if evalStr is None or len(str(evalStr)) == 0:
-                        await message.channel.send("Successful.")
-                    else:
-                        await message.channel.send(str(evalStr))
-                    return
-            except Exception as e:
-                print(repr(e))
-                await message.channel.send("oops, an error occured:\n"+str(repr(e)))
-                return
-
-        elif message.content.lower().startswith('!awaitadmin '): #runs statment and echos to where it came from
-            try:
-                if len(message.content) >= 11 and message.author.id == 269904594526666754:
-                    evalStr = await eval(message.content[11:])
-                    if evalStr is None or len(str(evalStr)) == 0:
-                        await message.channel.send("Successful.")
-                    else:
-                        await message.channel.send(str(evalStr))
-                    return
-            except Exception as e:
-                print(repr(e))
-                await message.channel.send("oops, an error occured:\n"+str(repr(e)))
-                return
-
-        elif message.content.lower().startswith('!exec '): #runs exec and echos to where it came from
-            try:
-                if len(message.content) >= 6 and message.author.id == 269904594526666754:
-                    exec(message.content[6:])
+    elif message.content.lower().startswith('!admin '): #runs statment and echos to where it came from
+        try:
+            if len(message.content) >= 7 and message.author.id == 269904594526666754:
+                evalStr = eval(message.content[7:])
+                if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
-                    return
-            except Exception as e:
-                print(repr(e))
-                await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+                else:
+                    await message.channel.send(str(evalStr))
                 return
+        except Exception as e:
+            print(repr(e))
+            await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+            return
 
-        elif message.content.lower().startswith('!adminto '):   #runs statment and echos to where the mention points
-            try:
-                if len(message.content) >= 9 and message.author.id == 269904594526666754:
-                    evalStr = eval(message.content[9:])
-                    if evalStr is None or len(str(evalStr)) == 0:
-                        evalStr = "Successful."
-                    for person in message.mentions:
-                        if (person.dm_channel is None):
-                            await person.create_dm()
-                        await person.dm_channel.send(str(evalStr))
-            except Exception as e:
-                print(repr(e))
-                await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+    elif message.content.lower().startswith('!awaitadmin '): #runs statment and echos to where it came from
+        try:
+            if len(message.content) >= 11 and message.author.id == 269904594526666754:
+                evalStr = await eval(message.content[11:])
+                if evalStr is None or len(str(evalStr)) == 0:
+                    await message.channel.send("Successful.")
+                else:
+                    await message.channel.send(str(evalStr))
                 return
+        except Exception as e:
+            print(repr(e))
+            await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+            return
+
+    elif message.content.lower().startswith('!exec '): #runs exec and echos to where it came from
+        try:
+            if len(message.content) >= 6 and message.author.id == 269904594526666754:
+                exec(message.content[6:])
+                await message.channel.send("Successful.")
+                return
+        except Exception as e:
+            print(repr(e))
+            await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+            return
+
+    elif message.content.lower().startswith('!adminto '):   #runs statment and echos to where the mention points
+        try:
+            if len(message.content) >= 9 and message.author.id == 269904594526666754:
+                evalStr = eval(message.content[9:])
+                if evalStr is None or len(str(evalStr)) == 0:
+                    evalStr = "Successful."
+                for person in message.mentions:
+                    if (person.dm_channel is None):
+                        await person.create_dm()
+                    await person.dm_channel.send(str(evalStr))
+        except Exception as e:
+            print(repr(e))
+            await message.channel.send("oops, an error occured:\n"+str(repr(e)))
+            return
 
     if message.content.lower().startswith('!vote') and message.author.id == 269904594526666754:
         # get a dict with all people
