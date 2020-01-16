@@ -30,7 +30,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!admin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 7 and adminQ(message.author.id):
+            if len(message.content) >= 7 and await adminQ(message.author.id):
                 evalStr = eval(message.content[7:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -44,7 +44,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!awaitadmin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 11 and adminQ(message.author.id):
+            if len(message.content) >= 11 and await adminQ(message.author.id):
                 evalStr = await eval(message.content[11:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -58,7 +58,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!exec '): #runs exec and echos to where it came from
         try:
-            if len(message.content) >= 6 and adminQ(message.author.id):
+            if len(message.content) >= 6 and await adminQ(message.author.id):
                 exec(message.content[6:])
                 await message.channel.send("Successful.")
                 return
@@ -69,7 +69,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!adminto '):   #runs statment and echos to where the mention points
         try:
-            if len(message.content) >= 9 and adminQ(message.author.id):
+            if len(message.content) >= 9 and await adminQ(message.author.id):
                 evalStr = eval(message.content[9:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     evalStr = "Successful."
@@ -82,7 +82,7 @@ async def on_message(message):
             await message.channel.send("oops, an error occured:\n"+str(repr(e)))
             return
 
-    if message.content.lower().startswith('!vote') and adminQ(message.author.id):
+    if message.content.lower().startswith('!vote') and await adminQ(message.author.id):
         # get a dict with all people
         peo = {}
         if message.role_mentions:
@@ -112,7 +112,7 @@ async def on_message(message):
             if m.channel != message.channel:
                 return
 
-            if m.content.lower().startswith("!end") and adminQ(m.author.id):
+            if m.content.lower().startswith("!end") and await adminQ(m.author.id):
                 return True
 
             elif m.content.startswith("!"+str(randomOptOut-1)) or m.content.startswith("!"+str(randomOptOut+1)):
