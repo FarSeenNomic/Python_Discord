@@ -15,7 +15,7 @@ async def on_ready():
 async def adminQ(author):
     if author.id == 269904594526666754:
         return True
-    if await author.guild.get_role(666763053060063263) in author.roles:
+    if author.guild.get_role(666763053060063263) in author.roles:
         return True
     return False
     
