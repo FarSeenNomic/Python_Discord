@@ -112,7 +112,7 @@ async def on_message(message):
             if m.channel != message.channel:
                 return
 
-            if m.content.lower().startswith("!end") and await adminQ(m.author.id):
+            if m.content.lower().startswith("!end") and await adminQ(m.author):
                 return True
 
             elif m.content.startswith("!"+str(randomOptOut-1)) or m.content.startswith("!"+str(randomOptOut+1)):
