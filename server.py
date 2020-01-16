@@ -12,6 +12,13 @@ async def on_ready():
     print(client.user.name)
     print('------')
 
+async def adminQ(author):
+    if author.id == 269904594526666754:
+        return True
+    if await author.guild.get_role(666763053060063263) in author.roles:
+        return True
+    return False
+    
 @client.event
 async def on_message(message):
     if not message.content.lower().startswith("!"):
@@ -23,7 +30,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!admin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 7 and message.author.id == 269904594526666754:
+            if len(message.content) >= 7 and adminQ(message.author.id):
                 evalStr = eval(message.content[7:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -37,7 +44,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!awaitadmin '): #runs statment and echos to where it came from
         try:
-            if len(message.content) >= 11 and message.author.id == 269904594526666754:
+            if len(message.content) >= 11 and adminQ(message.author.id):
                 evalStr = await eval(message.content[11:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     await message.channel.send("Successful.")
@@ -51,7 +58,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!exec '): #runs exec and echos to where it came from
         try:
-            if len(message.content) >= 6 and message.author.id == 269904594526666754:
+            if len(message.content) >= 6 and adminQ(message.author.id):
                 exec(message.content[6:])
                 await message.channel.send("Successful.")
                 return
@@ -62,7 +69,7 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!adminto '):   #runs statment and echos to where the mention points
         try:
-            if len(message.content) >= 9 and message.author.id == 269904594526666754:
+            if len(message.content) >= 9 and adminQ(message.author.id):
                 evalStr = eval(message.content[9:])
                 if evalStr is None or len(str(evalStr)) == 0:
                     evalStr = "Successful."
@@ -75,9 +82,13 @@ async def on_message(message):
             await message.channel.send("oops, an error occured:\n"+str(repr(e)))
             return
 
-    if message.content.lower().startswith('!vote') and message.author.id == 269904594526666754:
+    if message.content.lower().startswith('!vote') and adminQ(message.author.id):
         # get a dict with all people
-        peo = {i.id : None for i in message.guild.members if not i.bot}
+        peo = {}
+        if message.role_mentions:
+            peo = {i.id : None for i in message.role_mentions[0].members if not i.bot}
+        else:
+            peo = {i.id : None for i in message.guild.members if not i.bot}
         await message.channel.send("say `!yea` to vote yes\nsay `!nay` to vote no")
 
         def ch():
@@ -101,7 +112,7 @@ async def on_message(message):
             if m.channel != message.channel:
                 return
 
-            if m.content.lower().startswith("!end") and m.author.id == 269904594526666754:
+            if m.content.lower().startswith("!end") and adminQ(m.author.id):
                 return True
 
             elif m.content.startswith("!"+str(randomOptOut-1)) or m.content.startswith("!"+str(randomOptOut+1)):
@@ -110,7 +121,8 @@ async def on_message(message):
                 return False
 
             elif m.content.startswith("!"+str(randomOptOut)):
-                peo.pop(m.author.id)
+                for p in m.mentions:
+                    peo.pop(p.id)
                 randomOptOut = random.randint(10000,99999)
                 print(randomOptOut)
                 return False
